@@ -1,0 +1,19 @@
+.report-courseworkload-section table th:nth-child(1){
+  width: 10em;
+}
+
+.report-courseworkload-section table th:nth-child(2){
+  width: 30em;
+}
+
+.report-courseworkload-section table th:nth-child(3){
+  width: 15em;
+}
+
+.report-courseworkload-section table th:nth-child(4){
+  width: 10em;
+}
+
+.report-courseworkload-section table tr:last-child{
+  font-weight: bold;
+}
