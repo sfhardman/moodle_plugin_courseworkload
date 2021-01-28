@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for an attached PHP file
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,23 +25,24 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class file_processor_pptx extends file_processor_openxml {
+class file_processor_pptx extends file_processor_openxml
+{
+    protected function get_target_filename() {
+        return 'docProps/app.xml';
+    }
 
-  protected function get_target_filename() {
-    return 'docProps/app.xml';
-  }
+    public static function register($factory) {
+        $factory->register_class(static::class, 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+    }
 
-  public static function register($factory) {
-    $factory->register_class(static::class, 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-  }
-
-  protected function get_workload_from_data($data) {
-    $xml = new \SimpleXMLElement($data);
-    $pageCount = (int)$xml->Slides;
-    return new workload_item($this->file->get_filename(),
-      'powerpoint',
-      $pageCount,
-      'slides');
-  }
-  
+    protected function get_workload_from_data($data) {
+        $xml = new \SimpleXMLElement($data);
+        $pagecount = (int)$xml->Slides;
+        return new workload_item(
+            $this->file->get_filename(),
+            'powerpoint',
+            $pagecount,
+            'slides'
+        );
+    }
 }

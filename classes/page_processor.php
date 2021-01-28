@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for a Moodle Page
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,11 +26,12 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class page_processor {
-  public static function get_workload_items($DB, $db_course_module) {
-    $params = array('id' => $db_course_module->instance);
-    $page = $DB->get_record('page', $params, '*');
-    $content_items = html_processor::get_workload_items($page->content, $page->name, 'moodle page');
-    return $content_items;
-  }
+class page_processor
+{
+    public static function get_workload_items($DB, $dbcoursemodule) {
+        $params = array('id' => $dbcoursemodule->instance);
+        $page = $DB->get_record('page', $params, '*');
+        $contentitems = html_processor::get_workload_items($page->content, $page->name, 'moodle page');
+        return $contentitems;
+    }
 }

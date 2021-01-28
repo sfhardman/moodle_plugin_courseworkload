@@ -31,9 +31,9 @@ defined('MOODLE_INTERNAL') || die;
  * @param stdClass $context The context of the course
  */
 function report_courseworkload_extend_navigation_course($navigation, $course, $context) {
-  $url = new moodle_url('/report/courseworkload/index.php', array('id' => $course->id));
-  $name = get_string('pluginname', 'report_courseworkload');
-  $navigation->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+    $url = new moodle_url('/report/courseworkload/index.php', array('id' => $course->id));
+    $name = get_string('pluginname', 'report_courseworkload');
+    $navigation->add($name, $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
 }
 
 

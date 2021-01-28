@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for an attached video file
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,14 +28,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-class file_processor_video extends file_processor_id3 {
+class file_processor_video extends file_processor_id3
+{
+    public static function register($factory) {
+        $factory->register_class(static::class, 'video/mp4');
+    }
 
-  public static function register($factory) {
-    $factory->register_class(static::class, 'video/mp4');
-  }
-
-  protected function get_type_name() {
-    return 'video';
-  }
-
+    protected function get_type_name() {
+        return 'video';
+    }
 }

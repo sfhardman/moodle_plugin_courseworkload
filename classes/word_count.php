@@ -16,7 +16,7 @@
 
 /**
  * Helper class that returns a word count from text
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,11 +26,12 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class word_count {
-  public static function get_word_count($text) {
-    $text_stripped = strip_tags($text);
-    $words = preg_split('/((^\p{P}+)|(\p{P}*\s+\p{P}*)|(\p{P}+$))/', $text_stripped, -1, PREG_SPLIT_NO_EMPTY);
-    $word_count = count($words);
-    return $word_count;
-  }
+class word_count
+{
+    public static function get_word_count($text) {
+        $textstripped = strip_tags($text);
+        $words = preg_split('/((^\p{P}+)|(\p{P}*\s+\p{P}*)|(\p{P}+$))/', $textstripped, -1, PREG_SPLIT_NO_EMPTY);
+        $wordcount = count($words);
+        return $wordcount;
+    }
 }

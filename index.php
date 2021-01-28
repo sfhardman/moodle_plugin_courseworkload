@@ -23,20 +23,20 @@
 
 require_once(__DIR__ . '/../../config.php');
 
-$course_id = required_param('id', PARAM_INT);
+$courseid = required_param('id', PARAM_INT);
 
-$params = array('id' => $course_id);
-$db_course = $DB->get_record('course', $params, '*', MUST_EXIST);
-require_login($db_course);
-$course_context = context_course::instance($db_course->id);
+$params = array('id' => $courseid);
+$dbcourse = $DB->get_record('course', $params, '*', MUST_EXIST);
+require_login($dbcourse);
+$coursecontext = context_course::instance($dbcourse->id);
 
 
-$urlparams = array('id' => $course_id);
+$urlparams = array('id' => $courseid);
 
 $url = new moodle_url('/report/courseworkload/index.php', $urlparams);
 
 $title = get_string('pluginname', 'report_courseworkload');
-$coursename = format_string($db_course->fullname, true, array('context' => $course_context));
+$coursename = format_string($dbcourse->fullname, true, array('context' => $coursecontext));
 
 
 $PAGE->set_url($url);
@@ -44,7 +44,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($coursename);
 $PAGE->set_pagelayout('incourse');
 
-$course = new \report_courseworkload\course($course_id, $coursename);
+$course = new \report_courseworkload\course($courseid, $coursename);
 
 $course->process($DB);
 

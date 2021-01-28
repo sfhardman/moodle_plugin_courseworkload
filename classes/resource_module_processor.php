@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for a Moodle Resource Module
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,30 +26,30 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class resource_module_processor {
-  public static function get_workload_items($course_module_id) {
-    $result = array();
-    $context = \context_module::instance($course_module_id);
-    $fs = get_file_storage();
-    $files = $fs->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false);
-    $processor_factory = new file_processor_factory();
-    foreach ($files as $file) {
-      $processor = $processor_factory->create($file);
-      if ($processor) {
-        $item = $processor->get_workload_item();
-        if ($item) {
-          array_push($result, $item);
+class resource_module_processor
+{
+    public static function get_workload_items($coursemoduleid) {
+        $result = array();
+        $context = \context_module::instance($coursemoduleid);
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($context->id, 'mod_resource', 'content', 0, 'sortorder DESC, id ASC', false);
+        $processorfactory = new file_processor_factory();
+        foreach ($files as $file) {
+            $processor = $processorfactory->create($file);
+            if ($processor) {
+                $item = $processor->get_workload_item();
+                if ($item) {
+                    array_push($result, $item);
+                }
+            } else {
+                array_push($result, new workload_item(
+                    $file->get_filename(),
+                    "unsupported: {$file->get_mimetype()}",
+                    0,
+                    "unknown"
+                ));
+            }
         }
-      } else {
-        array_push($result, new workload_item(
-          $file->get_filename(),
-          "unsupported: {$file->get_mimetype()}",
-          0,
-          "unknown"
-        ));
-      }
-
+        return $result;
     }
-    return $result;
-  }
 }

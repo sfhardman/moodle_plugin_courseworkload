@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for a Moodle Course Module
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,30 +26,31 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class course_module_processor {
-  public static function get_workload_items($DB, $db_course_module) {
-    $result = array();
-    if ($db_course_module->deletioninprogress == "1") {
+class course_module_processor
+{
+    public static function get_workload_items($DB, $dbcoursemodule) {
+        $result = array();
+        if ($dbcoursemodule->deletioninprogress == "1") {
+            return $result;
+        }
+        $params = array('id' => $dbcoursemodule->module);
+        $module = $DB->get_record('modules', $params, '*');
+        if ($module->name == 'resource') {
+            return resource_module_processor::get_workload_items($dbcoursemodule->id);
+        } else if ($module->name == 'page') {
+            return page_processor::get_workload_items($DB, $dbcoursemodule);
+        } else if ($module->name == 'book') {
+            return book_processor::get_workload_items($DB, $dbcoursemodule);
+        } else {
+            return [
+                new workload_item(
+                    '',
+                    "unsupported: {$module->name}",
+                    0,
+                    'unknown'
+                )
+            ];
+        }
         return $result;
     }
-    $params = array('id' => $db_course_module->module);
-    $module = $DB->get_record('modules', $params, '*'); 
-    if ($module->name == 'resource') {
-      return resource_module_processor::get_workload_items($db_course_module->id);
-    } else if ($module->name == 'page') {
-      return page_processor::get_workload_items($DB, $db_course_module);
-    } else if ($module->name == 'book') {
-      return book_processor::get_workload_items($DB, $db_course_module);
-    } else {
-      return [
-        new workload_item(
-          '',
-          "unsupported: {$module->name}",
-          0,
-          'unknown'
-        )
-      ];
-    }
-    return $result;
-  }
 }

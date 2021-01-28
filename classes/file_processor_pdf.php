@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for an attached PDF file
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,28 +28,31 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-class file_processor_pdf extends file_processor {
-
-  static function register($factory) {
-    $factory->register_class(static::class, 'application/pdf');
-  }
-
-  protected function get_workload_from_file_handle($file_handle) {
-    $parser = new \Smalot\PdfParser\Parser();
-    $file_path = $this->get_file_path($file_handle);
-    $pdf = $parser->parseFile($file_path);
-    $text = $pdf->getText();
-    if (strlen($text) == 0) {
-      $details = $pdf->getDetails();
-      return new workload_item($this->file->get_filename(),
-        'scanned pdf',
-        $details['Pages'],
-        'pages');
+class file_processor_pdf extends file_processor
+{
+    public static function register($factory) {
+        $factory->register_class(static::class, 'application/pdf');
     }
-    return new workload_item($this->file->get_filename(),
-      'pdf',
-      word_count::get_word_count($text),
-      'words');
-  }
-  
+
+    protected function get_workload_from_file_handle($filehandle) {
+        $parser = new \Smalot\PdfParser\Parser();
+        $filepath = $this->get_file_path($filehandle);
+        $pdf = $parser->parseFile($filepath);
+        $text = $pdf->getText();
+        if (strlen($text) == 0) {
+            $details = $pdf->getDetails();
+            return new workload_item(
+                $this->file->get_filename(),
+                'scanned pdf',
+                $details['Pages'],
+                'pages'
+            );
+        }
+        return new workload_item(
+            $this->file->get_filename(),
+            'pdf',
+            word_count::get_word_count($text),
+            'words'
+        );
+    }
 }

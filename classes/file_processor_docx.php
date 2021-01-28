@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for an attached Word DOCX file
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,24 +26,26 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class file_processor_docx extends file_processor_openxml {
+class file_processor_docx extends file_processor_openxml
+{
+    protected function get_target_filename() {
+        return 'word/document.xml';
+    }
 
-  protected function get_target_filename() {
-    return 'word/document.xml';
-  }
+    public static function register($factory) {
+        $factory->register_class(static::class, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    }
 
-  public static function register($factory) {
-    $factory->register_class(static::class, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-  }
-
-  protected function get_workload_from_data($data) {
-    $xml = new \DOMDocument();
-    $xml->loadXML($data, LIBXML_NOENT | LIBXML_XINCLUDE | LIBXML_NOERROR | LIBXML_NOWARNING);
-    // Return data without XML formatting tags
-    $text = strip_tags($xml->saveXML());
-    return new workload_item($this->file->get_filename(),
-      'word doc',
-      word_count::get_word_count($text),
-      'words');
-  }
+    protected function get_workload_from_data($data) {
+        $xml = new \DOMDocument();
+        $xml->loadXML($data, LIBXML_NOENT | LIBXML_XINCLUDE | LIBXML_NOERROR | LIBXML_NOWARNING);
+        // Return data without XML formatting tags.
+        $text = strip_tags($xml->saveXML());
+        return new workload_item(
+            $this->file->get_filename(),
+            'word doc',
+            word_count::get_word_count($text),
+            'words'
+        );
+    }
 }

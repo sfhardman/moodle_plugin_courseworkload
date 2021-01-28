@@ -16,7 +16,7 @@
 
 /**
  * Constructs a file processor subclass that can handle a given mime type
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,27 +25,28 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class file_processor_factory {
-  private $processors = [];
+class file_processor_factory
+{
+    private $processors = [];
 
-  public function __construct() {
-    file_processor_audio::register($this);
-    file_processor_video::register($this);
-    file_processor_docx::register($this);
-    file_processor_pptx::register($this);
-    file_processor_pdf::register($this);
-  }
-
-  public function register_class($class_name, $supported_mime_type) {
-    $this->processors[$class_name] = $supported_mime_type;
-  }
-
-  public function create($file) {
-    $mime_type = $file->get_mimetype();
-    $class_name = array_search($mime_type, $this->processors);
-    if ($class_name === FALSE) {
-      return NULL;
+    public function __construct() {
+        file_processor_audio::register($this);
+        file_processor_video::register($this);
+        file_processor_docx::register($this);
+        file_processor_pptx::register($this);
+        file_processor_pdf::register($this);
     }
-    return new $class_name($file);
-  }
+
+    public function register_class($classname, $supportedmimetype) {
+        $this->processors[$classname] = $supportedmimetype;
+    }
+
+    public function create($file) {
+        $mimetype = $file->get_mimetype();
+        $classname = array_search($mimetype, $this->processors);
+        if ($classname === false) {
+            return null;
+        }
+        return new $classname($file);
+    }
 }

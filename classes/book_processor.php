@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for a Moodle Book
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,24 +25,25 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-class book_processor {
-  public static function get_workload_items($DB, $db_course_module) {
-    $items = array();
-    $params = array('id' => $db_course_module->instance);
-    $book = $DB->get_record('book', $params, '*');
-    $content_items = html_processor::get_workload_items($book->intro, $book->name, 'book intro');
-    $items = array_merge($items, $content_items);
-    $params = array('bookid' => $db_course_module->instance);
-    $chapters = $DB->get_records('book_chapters', $params, '', '*');
-    foreach ($chapters as $chapter) {
-      if ($chapter->subchapter == 0) {
-        $chapter_type = 'book chapter';
-      } else {
-        $chapter_type = 'book subchapter';
-      }
-      $content_items = html_processor::get_workload_items($chapter->content, $chapter->title, $chapter_type);
-      $items = array_merge($items, $content_items);
-    }    
-    return $items;    
-  }
+class book_processor
+{
+    public static function get_workload_items($DB, $dbcoursemodule) {
+        $items = array();
+        $params = array('id' => $dbcoursemodule->instance);
+        $book = $DB->get_record('book', $params, '*');
+        $contentitems = html_processor::get_workload_items($book->intro, $book->name, 'book intro');
+        $items = array_merge($items, $contentitems);
+        $params = array('bookid' => $dbcoursemodule->instance);
+        $chapters = $DB->get_records('book_chapters', $params, '', '*');
+        foreach ($chapters as $chapter) {
+            if ($chapter->subchapter == 0) {
+                $chaptertype = 'book chapter';
+            } else {
+                $chaptertype = 'book subchapter';
+            }
+            $contentitems = html_processor::get_workload_items($chapter->content, $chapter->title, $chaptertype);
+            $items = array_merge($items, $contentitems);
+        }
+        return $items;
+    }
 }

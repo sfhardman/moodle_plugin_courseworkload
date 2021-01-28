@@ -16,7 +16,7 @@
 
 /**
  * Abstract base class for calculating workload for attached files with ID3 tags
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,18 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-abstract class file_processor_id3 extends file_processor {
+abstract class file_processor_id3 extends file_processor
+{
+    abstract protected function get_type_name();
 
-  abstract protected function get_type_name();
-
-  protected function get_workload_from_file_handle($file_handle) {
-    $file_path = $this->get_file_path($file_handle);
-    $getID3 = new \getID3;
-    $id3 = $getID3->analyze($file_path);
-    return new workload_item($this->file->get_filename(),
-      $this->get_type_name(),
-      $id3['playtime_seconds'] / 60,
-      'runtime minutes');
-  }
-  
+    protected function get_workload_from_file_handle($filehandle) {
+        $filepath = $this->get_file_path($filehandle);
+        $getid3 = new \getID3;
+        $id3 = $getid3->analyze($filepath);
+        return new workload_item(
+            $this->file->get_filename(),
+            $this->get_type_name(),
+            $id3['playtime_seconds'] / 60,
+            'runtime minutes'
+        );
+    }
 }

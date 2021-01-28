@@ -17,7 +17,7 @@
 /**
  * Abstract base class for calculating workload from an OpenXML
  * document (e.g. Office doc)
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,31 +28,30 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-abstract class file_processor_openxml extends file_processor {
+abstract class file_processor_openxml extends file_processor
+{
+    abstract protected function get_target_filename();
 
-  protected abstract function get_target_filename();
+    abstract protected function get_workload_from_data($data);
 
-  protected abstract function get_workload_from_data($data);
-
-  protected function get_workload_from_file_handle($file_handle) {
-    $file_path = $this->get_file_path($file_handle);
-    $zip = new \ZipArchive();
-    $zip_result=$zip->open($file_path);
-    if ($zip_result) {
-      try {
-        $target_filename = $this->get_target_filename();
-        if ($index = $zip->locateName($target_filename))  {
-          $data = $zip->getFromIndex($index);
-          return $this->get_workload_from_data($data);
+    protected function get_workload_from_file_handle($filehandle) {
+        $filepath = $this->get_file_path($filehandle);
+        $zip = new \ZipArchive();
+        $zipresult = $zip->open($filepath);
+        if ($zipresult) {
+            try {
+                $targetfilename = $this->get_target_filename();
+                if ($index = $zip->locateName($targetfilename)) {
+                    $data = $zip->getFromIndex($index);
+                    return $this->get_workload_from_data($data);
+                } else {
+                    throw new \Exception("Could not find $targetfilename in zip archive $filepath");
+                }
+            } finally {
+                $zip->close();
+            }
         } else {
-          throw new \Exception("Could not find $target_filename in zip archive $file_path");
+            throw new \Exception("Could not unzip $filepath");
         }
-      } finally {
-        $zip->close();
-      }
-    } else {
-      throw new \Exception("Could not unzip $file_path");
     }
-  }
-  
 }

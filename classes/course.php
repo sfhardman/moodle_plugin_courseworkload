@@ -16,7 +16,7 @@
 
 /**
  * Calculates the workload for a Moodle Course
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,34 +25,33 @@ namespace report_courseworkload;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/../../../config.php');
+class course implements \renderable
+{
+    protected $courseid;
+    protected $name;
+    protected $sections = array();
 
-class course implements \renderable {
-  protected $course_id;
-  protected $name;
-  protected $sections = array();
-
-  public function __construct($course_id, $name) {
-    $this->name = $name;
-    $this->course_id = $course_id;
-  }
-
-  public function get_name() {
-    return $this->name;
-  }
-
-  public function get_sections() {
-    return $this->sections;
-  }
-
-  public function process($DB) {
-    $params = array('course' => $this->course_id);
-    $db_sections = $DB->get_records('course_sections', $params, '', '*');
-
-    foreach ($db_sections as $db_section) {
-      $section = new section($db_section);
-      array_push($this->sections, $section);
-      $section->process($DB);
+    public function __construct($courseid, $name) {
+        $this->name = $name;
+        $this->course_id = $courseid;
     }
-  }
+
+    public function get_name() {
+        return $this->name;
+    }
+
+    public function get_sections() {
+        return $this->sections;
+    }
+
+    public function process($DB) {
+        $params = array('course' => $this->course_id);
+        $dbsections = $DB->get_records('course_sections', $params, '', '*');
+
+        foreach ($dbsections as $dbsection) {
+            $section = new section($dbsection);
+            array_push($this->sections, $section);
+            $section->process($DB);
+        }
+    }
 }

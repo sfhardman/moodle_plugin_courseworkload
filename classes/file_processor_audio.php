@@ -16,7 +16,7 @@
 
 /**
  * Calculates duration of attached audio files
- * 
+ *
  * @package    report_courseworkload
  * @author  Simon Hardman
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,14 +28,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-class file_processor_audio extends file_processor_id3 {
+class file_processor_audio extends file_processor_id3
+{
+    public static function register($factory) {
+        $factory->register_class(static::class, 'audio/mp3');
+    }
 
-  public static function register($factory) {
-    $factory->register_class(static::class, 'audio/mp3');
-  }
-
-  protected function get_type_name() {
-    return 'audio';
-  }
-
+    protected function get_type_name() {
+        return 'audio';
+    }
 }
