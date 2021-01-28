@@ -24,6 +24,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-$plugin->version   = 2021011900; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2020060900; // Requires this Moodle version.
+$plugin->version   = 2021012900; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2019052005; // Requires this Moodle version.
 $plugin->component = 'report_courseworkload'; // Full name of the plugin (used for diagnostics).
